@@ -77,6 +77,46 @@ export const plugins: Plugin[] = [
             })
             field.blocks[textBlockIndex].fields = textBlockFields
 
+            // Add password block
+            field.blocks.push({
+              slug: 'password',
+              labels: {
+                singular: 'Password Field',
+                plural: 'Password Fields',
+              },
+              fields: [
+                {
+                  name: 'name',
+                  label: 'Name (lowercase, no special characters)',
+                  type: 'text',
+                  required: true,
+                  defaultValue: 'password',
+                },
+                {
+                  name: 'label',
+                  label: 'Label',
+                  type: 'text',
+                },
+                {
+                  name: 'required',
+                  label: 'Required',
+                  type: 'checkbox',
+                  defaultValue: false,
+                },
+                {
+                  name: 'width',
+                  label: 'Field Width (%)',
+                  type: 'number',
+                  defaultValue: 100,
+                  min: 25,
+                  max: 100,
+                  admin: {
+                    step: 25,
+                  },
+                },
+              ],
+            })
+
             return {
               ...field
             }
