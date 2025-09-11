@@ -12,8 +12,9 @@ export const Text: React.FC<
   TextField & {
     errors: Partial<FieldErrorsImpl>
     register: UseFormRegister<FieldValues>
+    isPassword?: boolean
   }
-> = ({ name, defaultValue, errors, label, register, required, width }) => {
+> = ({ name, defaultValue, errors, label, register, required, width, isPassword }) => {
   return (
     <Width width={width}>
       <Label htmlFor={name}>
@@ -25,7 +26,7 @@ export const Text: React.FC<
           </span>
         )}
       </Label>
-      <Input defaultValue={defaultValue} id={name} type="text" {...register(name, { required })} />
+      <Input defaultValue={isPassword ? '' : defaultValue} id={name} type={isPassword ? 'password' : 'text'} {...register(name, { required })} />
       {errors[name] && <Error name={name} />}
     </Width>
   )

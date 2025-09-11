@@ -62,6 +62,26 @@ export const plugins: Plugin[] = [
     formOverrides: {
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
+          if (field.name == 'fields') {
+            const textBlockIndex = field.blocks.findIndex((block) => block.slug === 'text')
+
+            const textBlockFields = field.blocks[textBlockIndex].fields
+            textBlockFields.push({
+              name: 'isPassword',
+              type: 'checkbox',
+              label: 'Is Password Field',
+              defaultValue: false,
+              admin: {
+                description: 'Check this to make the input field type "password"',
+              },
+            })
+            field.blocks[textBlockIndex].fields = textBlockFields
+
+            return {
+              ...field
+            }
+          }
+
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,
