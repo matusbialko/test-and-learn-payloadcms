@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Button } from "@/components/shadcn/ui/button"
 interface ExampleBlockProps {
   exampleText: string
 }
@@ -14,6 +14,7 @@ export const ExampleBlock: React.FC<ExampleBlockProps> = (props) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Example Block</h3>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed">{exampleText}</p>
+            <Button variant="secondary">Click me</Button>
           </div>
         </div>
       </div>
