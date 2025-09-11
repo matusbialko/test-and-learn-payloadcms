@@ -13,6 +13,7 @@ import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 import { ExampleBlock } from '../../blocks/ExampleBlock/config'
+import { ChartBlock } from '../../blocks/ChartBlock.tsx/config'
 
 import {
   MetaDescriptionField,
@@ -76,7 +77,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, ExampleBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, ExampleBlock, ChartBlock],
               required: true,
               admin: {
                 initCollapsed: true,
