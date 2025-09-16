@@ -14,6 +14,9 @@ import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 import { ExampleBlock } from '../../blocks/ExampleBlock/config'
 import { ChartBlock } from '../../blocks/ChartBlock.tsx/config'
+import { LoginBlock } from '../../blocks/LoginBlock/config'
+import { RegisterBlock } from '../../blocks/RegisterBlock/config'
+import { UserDetailsBlock } from '../../blocks/UserDetailsBlock/config'
 
 import {
   MetaDescriptionField,
@@ -77,7 +80,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, ExampleBlock, ChartBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, ExampleBlock, ChartBlock, LoginBlock, RegisterBlock, UserDetailsBlock],
               required: true,
               admin: {
                 initCollapsed: true,

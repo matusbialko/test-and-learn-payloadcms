@@ -9,6 +9,9 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ExampleBlock } from '@/blocks/ExampleBlock/Component'
 import { ChartBlock } from '@/blocks/ChartBlock.tsx/Component'
+import { LoginBlock } from '@/blocks/LoginBlock/Component'
+import { RegisterBlock } from '@/blocks/RegisterBlock/Component'
+import { UserDetailsBlock } from '@/blocks/UserDetailsBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -18,6 +21,9 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   exampleBlock: ExampleBlock,
   chartBlock: ChartBlock,
+  loginBlock: LoginBlock,
+  registerBlock: RegisterBlock,
+  userDetailsBlock: UserDetailsBlock,
 }
 
 export const RenderBlocks: React.FC<{
