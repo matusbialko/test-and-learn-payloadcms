@@ -17,6 +17,7 @@ import { ChartBlock } from '../../blocks/ChartBlock.tsx/config'
 import { LoginBlock } from '../../blocks/LoginBlock/config'
 import { RegisterBlock } from '../../blocks/RegisterBlock/config'
 import { UserDetailsBlock } from '../../blocks/UserDetailsBlock/config'
+import { TodoListBlock } from '../../blocks/TodoListBlock/config'
 
 import {
   MetaDescriptionField,
@@ -80,7 +81,19 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, ExampleBlock, ChartBlock, LoginBlock, RegisterBlock, UserDetailsBlock],
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                ExampleBlock,
+                ChartBlock,
+                LoginBlock,
+                RegisterBlock,
+                UserDetailsBlock,
+                TodoListBlock
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

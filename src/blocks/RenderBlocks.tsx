@@ -12,6 +12,7 @@ import { ChartBlock } from '@/blocks/ChartBlock.tsx/Component'
 import { LoginBlock } from '@/blocks/LoginBlock/Component'
 import { RegisterBlock } from '@/blocks/RegisterBlock/Component'
 import { UserDetailsBlock } from '@/blocks/UserDetailsBlock/Component'
+import { TodoListBlock } from './TodoListBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -24,6 +25,7 @@ const blockComponents = {
   loginBlock: LoginBlock,
   registerBlock: RegisterBlock,
   userDetailsBlock: UserDetailsBlock,
+  todoListBlock: TodoListBlock,
 }
 
 export const RenderBlocks: React.FC<{
