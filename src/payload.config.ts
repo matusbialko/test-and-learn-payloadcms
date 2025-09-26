@@ -21,12 +21,6 @@ import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-console.log('DATABASE_URI', process.env.DATABASE_URI)
-console.log('PAYLOAD_SECRET', process.env.PAYLOAD_SECRET)
-console.log('NEXT_PUBLIC_SERVER_URL', process.env.NEXT_PUBLIC_SERVER_URL)
-console.log('CRON_SECRET', process.env.CRON_SECRET)
-console.log('PREVIEW_SECRET', process.env.PREVIEW_SECRET)
-
 export default buildConfig({
   admin: {
     components: {
