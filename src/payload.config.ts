@@ -71,6 +71,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, PageUsers],
   cors: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app'].filter(Boolean),
+  csrf: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app'].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,
