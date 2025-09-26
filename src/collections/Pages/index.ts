@@ -18,6 +18,7 @@ import { LoginBlock } from '../../blocks/LoginBlock/config'
 import { RegisterBlock } from '../../blocks/RegisterBlock/config'
 import { UserDetailsBlock } from '../../blocks/UserDetailsBlock/config'
 import { TodoListBlock } from '../../blocks/TodoListBlock/config'
+import { HeroBlock } from '../../blocks/HeroBlock/config'
 
 import {
   MetaDescriptionField,
@@ -82,6 +83,7 @@ export const Pages: CollectionConfig<'pages'> = {
               name: 'layout',
               type: 'blocks',
               blocks: [
+                HeroBlock,
                 CallToAction,
                 Content,
                 MediaBlock,
@@ -92,7 +94,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 LoginBlock,
                 RegisterBlock,
                 UserDetailsBlock,
-                TodoListBlock
+                TodoListBlock,
               ],
               required: true,
               admin: {

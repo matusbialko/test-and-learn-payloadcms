@@ -13,6 +13,7 @@ import { LoginBlock } from '@/blocks/LoginBlock/Component'
 import { RegisterBlock } from '@/blocks/RegisterBlock/Component'
 import { UserDetailsBlock } from '@/blocks/UserDetailsBlock/Component'
 import { TodoListBlock } from './TodoListBlock/Component'
+import { HeroBlock } from '@/blocks/HeroBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -26,6 +27,7 @@ const blockComponents = {
   registerBlock: RegisterBlock,
   userDetailsBlock: UserDetailsBlock,
   todoListBlock: TodoListBlock,
+  heroBlock: HeroBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -45,8 +47,13 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
+              // Special handling for HeroBlock as first block
+              const isFirstBlock = index === 0
+              const isHeroBlock = blockType === 'heroBlock'
+              const marginClass = isFirstBlock && isHeroBlock ? 'mb-16' : 'my-16'
+
               return (
-                <div className="my-16" key={index}>
+                <div className={marginClass} key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>

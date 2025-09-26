@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'page-users': PageUserAuthOperations;
   };
   blocks: {};
   collections: {
@@ -72,6 +73,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'page-users': PageUser;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +90,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'page-users': PageUsersSelect<false> | PageUsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -109,9 +112,13 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
-  };
+  user:
+    | (User & {
+        collection: 'users';
+      })
+    | (PageUser & {
+        collection: 'page-users';
+      });
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -141,6 +148,24 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface PageUserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
@@ -149,7 +174,7 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'hero45';
     richText?: {
       root: {
         type: string;
@@ -191,7 +216,20 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | HeroBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | ExampleBlock
+    | ChartBlock
+    | LoginBlock
+    | RegisterBlock
+    | UserDetailsBlock
+    | TodoListBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -391,6 +429,42 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock".
+ */
+export interface HeroBlock {
+  heroType: 'highImpact' | 'mediumImpact' | 'lowImpact' | 'hero45';
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  media?: (string | null) | Media;
+  badge?: string | null;
+  heading?: string | null;
+  features?:
+    | {
+        icon: 'handHelping' | 'users' | 'zap' | 'shield' | 'star' | 'heart';
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -660,6 +734,10 @@ export interface Form {
             width?: number | null;
             defaultValue?: string | null;
             required?: boolean | null;
+            /**
+             * Check this to make the input field type "password"
+             */
+            isPassword?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'text';
@@ -673,6 +751,15 @@ export interface Form {
             id?: string | null;
             blockName?: string | null;
             blockType: 'textarea';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            required?: boolean | null;
+            width?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'password';
           }
       )[]
     | null;
@@ -733,6 +820,126 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ExampleBlock".
+ */
+export interface ExampleBlock {
+  /**
+   * Enter some example text to display in this block
+   */
+  exampleText: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'exampleBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChartBlock".
+ */
+export interface ChartBlock {
+  /**
+   * Enter some chart text to display in this block
+   */
+  chartText?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'chartBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LoginBlock".
+ */
+export interface LoginBlock {
+  /**
+   * The title displayed above the login form
+   */
+  title?: string | null;
+  /**
+   * Optional description text below the title
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'loginBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RegisterBlock".
+ */
+export interface RegisterBlock {
+  /**
+   * The title displayed above the registration form
+   */
+  title?: string | null;
+  /**
+   * Optional description text below the title
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'registerBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UserDetailsBlock".
+ */
+export interface UserDetailsBlock {
+  /**
+   * The title displayed above the user details section
+   */
+  title?: string | null;
+  /**
+   * Optional description text below the title
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'userDetailsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TodoListBlock".
+ */
+export interface TodoListBlock {
+  title?: string | null;
+  todos?:
+    | {
+        text: string;
+        completed?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'todoListBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-users".
+ */
+export interface PageUser {
+  id: string;
+  username?: string | null;
+  profilePicture?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -928,6 +1135,10 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
+        relationTo: 'page-users';
+        value: string | PageUser;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -948,10 +1159,15 @@ export interface PayloadLockedDocument {
         value: string | PayloadJob;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'page-users';
+        value: string | PageUser;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -961,10 +1177,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'page-users';
+        value: string | PageUser;
+      };
   key?: string | null;
   value?:
     | {
@@ -1020,11 +1241,18 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroBlock?: T | HeroBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        exampleBlock?: T | ExampleBlockSelect<T>;
+        chartBlock?: T | ChartBlockSelect<T>;
+        loginBlock?: T | LoginBlockSelect<T>;
+        registerBlock?: T | RegisterBlockSelect<T>;
+        userDetailsBlock?: T | UserDetailsBlockSelect<T>;
+        todoListBlock?: T | TodoListBlockSelect<T>;
       };
   meta?:
     | T
@@ -1039,6 +1267,27 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  heroType?: T;
+  richText?: T;
+  media?: T;
+  badge?: T;
+  heading?: T;
+  features?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1121,6 +1370,70 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ExampleBlock_select".
+ */
+export interface ExampleBlockSelect<T extends boolean = true> {
+  exampleText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChartBlock_select".
+ */
+export interface ChartBlockSelect<T extends boolean = true> {
+  chartText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LoginBlock_select".
+ */
+export interface LoginBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RegisterBlock_select".
+ */
+export interface RegisterBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UserDetailsBlock_select".
+ */
+export interface UserDetailsBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TodoListBlock_select".
+ */
+export interface TodoListBlockSelect<T extends boolean = true> {
+  title?: T;
+  todos?:
+    | T
+    | {
+        text?: T;
+        completed?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1293,6 +1606,30 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-users_select".
+ */
+export interface PageUsersSelect<T extends boolean = true> {
+  username?: T;
+  profilePicture?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -1402,6 +1739,7 @@ export interface FormsSelect<T extends boolean = true> {
               width?: T;
               defaultValue?: T;
               required?: T;
+              isPassword?: T;
               id?: T;
               blockName?: T;
             };
@@ -1413,6 +1751,16 @@ export interface FormsSelect<T extends boolean = true> {
               width?: T;
               defaultValue?: T;
               required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        password?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              required?: T;
+              width?: T;
               id?: T;
               blockName?: T;
             };
