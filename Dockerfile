@@ -82,6 +82,10 @@ RUN chown -R nextjs:nodejs public/media
 # Ensure media directory exists and is writable
 RUN mkdir -p public/media
 RUN chmod 755 public/media
+RUN chown -R nextjs:nodejs public/media
+
+# Create volume for media files to persist between container restarts
+VOLUME ["/app/public/media"]
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
