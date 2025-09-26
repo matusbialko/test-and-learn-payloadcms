@@ -38,26 +38,13 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   if (!src && resource && typeof resource === 'object') {
     const { alt: altFromResource, height: fullHeight, url, width: fullWidth } = resource
 
-    // Debug logging
-    console.log('=== ImageMedia Debug ===')
-    console.log('Resource object:', resource)
-    console.log('URL from resource:', url)
-    console.log('Full height:', fullHeight)
-    console.log('Full width:', fullWidth)
-    console.log('Alt from resource:', altFromResource)
-    console.log('Cache tag (updatedAt):', resource.updatedAt)
-
     width = fullWidth!
     height = fullHeight!
     alt = altFromResource || ''
 
     const cacheTag = resource.updatedAt
 
-    const mediaUrl = getMediaUrl(url, cacheTag)
-    console.log('Generated media URL:', mediaUrl)
-    console.log('=== End Debug ===')
-
-    src = mediaUrl
+    src = getMediaUrl(url, cacheTag)
   }
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
