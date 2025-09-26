@@ -1,0 +1,27 @@
+name: deploy-payloadcms
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: matusbialko/test-and-learn-payloadcms
+    branch: main
+  run_command: node server.js
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  routes:
+  - path: /
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: DATABASE_URI
+    value: ${DATABASE_URI}
+  - key: PAYLOAD_SECRET
+    value: ${PAYLOAD_SECRET}
+  - key: NEXT_PUBLIC_SERVER_URL
+    value: ${NEXT_PUBLIC_SERVER_URL}
+  - key: CRON_SECRET
+    value: ${CRON_SECRET}
+  - key: PREVIEW_SECRET
+    value: ${PREVIEW_SECRET}
