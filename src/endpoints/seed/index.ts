@@ -81,18 +81,10 @@ export const seed = async ({
   payload.logger.info(`— Seeding media...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
+    fetchLocalFile('/media/image-post1.webp'),
+    fetchLocalFile('/media/image-post2.webp'),
+    fetchLocalFile('/media/image-post3.webp'),
+    fetchLocalFile('/media/image-hero1.webp'),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
@@ -359,5 +351,22 @@ async function fetchFileByURL(url: string): Promise<File> {
     data: Buffer.from(data),
     mimetype: `image/${url.split('.').pop()}`,
     size: data.byteLength,
+  }
+}
+
+async function fetchLocalFile(path: string): Promise<File> {
+  const fs = await import('fs')
+  const fullPath = `public${path}`
+
+  try {
+    const data = fs.readFileSync(fullPath)
+    return {
+      name: path.split('/').pop() || `file-${Date.now()}`,
+      data: Buffer.from(data),
+      mimetype: `image/${path.split('.').pop()}`,
+      size: data.length,
+    }
+  } catch (error) {
+    throw new Error(`Failed to read local file ${fullPath}: ${error}`)
   }
 }
