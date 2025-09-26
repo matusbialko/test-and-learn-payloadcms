@@ -81,10 +81,18 @@ export const seed = async ({
   payload.logger.info(`— Seeding media...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchLocalFile('/media/image-post1.webp'),
-    fetchLocalFile('/media/image-post2.webp'),
-    fetchLocalFile('/media/image-post3.webp'),
-    fetchLocalFile('/media/image-hero1.webp'),
+    fetchFileByURL(
+      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
+    ),
+    fetchFileByURL(
+      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post2.webp',
+    ),
+    fetchFileByURL(
+      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
+    ),
+    fetchFileByURL(
+      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
+    ),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
