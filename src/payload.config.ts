@@ -70,7 +70,7 @@ export default buildConfig({
     url: process.env.DATABASE_URI || '',
   }),
   collections: [Pages, Posts, Media, Categories, Users, PageUsers],
-  cors: [getServerSideURL()].filter(Boolean),
+  cors: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app'].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,
