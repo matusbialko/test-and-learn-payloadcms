@@ -356,17 +356,37 @@ async function fetchFileByURL(url: string): Promise<File> {
 
 async function fetchLocalFile(path: string): Promise<File> {
   const fs = await import('fs')
-  const fullPath = `public${path}`
+  const pathModule = await import('path')
 
-  try {
-    const data = fs.readFileSync(fullPath)
-    return {
-      name: path.split('/').pop() || `file-${Date.now()}`,
-      data: Buffer.from(data),
-      mimetype: `image/${path.split('.').pop()}`,
-      size: data.length,
+  // Try different possible paths
+  const possiblePaths = [
+    `public${path}`,
+    `./public${path}`,
+    pathModule.resolve(process.cwd(), `public${path}`),
+    pathModule.resolve(__dirname, `../../public${path}`),
+  ]
+
+  let data: Buffer | null = null
+  let usedPath = ''
+
+  for (const fullPath of possiblePaths) {
+    try {
+      data = fs.readFileSync(fullPath)
+      usedPath = fullPath
+      break
+    } catch (error) {
+      // Continue to next path
     }
-  } catch (error) {
-    throw new Error(`Failed to read local file ${fullPath}: ${error}`)
+  }
+
+  if (!data) {
+    throw new Error(`Failed to read local file. Tried paths: ${possiblePaths.join(', ')}`)
+  }
+
+  return {
+    name: path.split('/').pop() || `file-${Date.now()}`,
+    data: Buffer.from(data),
+    mimetype: `image/${path.split('.').pop()}`,
+    size: data.length,
   }
 }
