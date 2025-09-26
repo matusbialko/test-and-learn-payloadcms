@@ -22,6 +22,21 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Accept build arguments
+ARG DATABASE_URI
+ARG PAYLOAD_SECRET
+ARG NEXT_PUBLIC_SERVER_URL
+ARG CRON_SECRET
+ARG PREVIEW_SECRET
+
+# Set environment variables from build arguments
+ENV DATABASE_URI=$DATABASE_URI
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
+ENV CRON_SECRET=$CRON_SECRET
+ENV PREVIEW_SECRET=$PREVIEW_SECRET
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -40,6 +55,13 @@ RUN \
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
+
+# Runtime environment variables (DigitalOcean will inject real values)
+ENV DATABASE_URI=${DATABASE_URI}
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
+ENV CRON_SECRET=${CRON_SECRET}
+ENV PREVIEW_SECRET=${PREVIEW_SECRET}
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
