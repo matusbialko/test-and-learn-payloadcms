@@ -65,8 +65,28 @@ export default buildConfig({
     url: process.env.DATABASE_URI || '',
   }),
   collections: [Pages, Posts, Media, Categories, Users, PageUsers],
-  cors: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app', 'http://haluze.site'].filter(Boolean),
-  csrf: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app', 'http://haluze.site'].filter(Boolean),
+  cors: [
+    getServerSideURL(),
+    'https://deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://deploy-payloadcms-4rygl.ondigitalocean.app',
+    'https://www.deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://www.deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://haluze.site',
+    'https://haluze.site',
+    'http://www.haluze.site',
+    'https://www.haluze.site',
+  ].filter(Boolean),
+  csrf: [
+    getServerSideURL(),
+    'https://deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://deploy-payloadcms-4rygl.ondigitalocean.app',
+    'https://www.deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://www.deploy-payloadcms-4rygl.ondigitalocean.app',
+    'http://haluze.site',
+    'https://haluze.site',
+    'http://www.haluze.site',
+    'https://www.haluze.site',
+  ].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,
@@ -79,8 +99,8 @@ export default buildConfig({
         projectId: process.env.GCS_PROJECT_ID || '',
         // For DigitalOcean App Platform - use JSON credentials
         credentials: process.env.GCS_CREDENTIALS_BASE64
-            ? JSON.parse(Buffer.from(process.env.GCS_CREDENTIALS_BASE64, 'base64').toString())
-            : undefined,
+          ? JSON.parse(Buffer.from(process.env.GCS_CREDENTIALS_BASE64, 'base64').toString())
+          : undefined,
       },
     }),
   ],
