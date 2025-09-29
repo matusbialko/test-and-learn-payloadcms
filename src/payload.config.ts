@@ -65,8 +65,8 @@ export default buildConfig({
     url: process.env.DATABASE_URI || '',
   }),
   collections: [Pages, Posts, Media, Categories, Users, PageUsers],
-  cors: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app'].filter(Boolean),
-  csrf: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app'].filter(Boolean),
+  cors: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app', 'http://haluze.site'].filter(Boolean),
+  csrf: [getServerSideURL(), 'https://deploy-payloadcms-4rygl.ondigitalocean.app', 'http://haluze.site'].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,
