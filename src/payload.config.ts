@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { gcsStorage } from '@payloadcms/storage-gcs'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -69,7 +70,21 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // storage-adapter-placeholder
+    gcsStorage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.GCS_BUCKET_NAME || '',
+      options: {
+        projectId: process.env.GCS_PROJECT_ID || '',
+        // For DigitalOcean App Platform - use JSON credentials
+        credentials: process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON
+          ? JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
+          : process.env.GCS_CREDENTIALS_BASE64
+            ? JSON.parse(Buffer.from(process.env.GCS_CREDENTIALS_BASE64, 'base64').toString())
+            : undefined,
+      },
+    }),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
