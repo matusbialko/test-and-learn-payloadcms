@@ -78,9 +78,7 @@ export default buildConfig({
       options: {
         projectId: process.env.GCS_PROJECT_ID || '',
         // For DigitalOcean App Platform - use JSON credentials
-        credentials: process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON
-          ? JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
-          : process.env.GCS_CREDENTIALS_BASE64
+        credentials: process.env.GCS_CREDENTIALS_BASE64
             ? JSON.parse(Buffer.from(process.env.GCS_CREDENTIALS_BASE64, 'base64').toString())
             : undefined,
       },
