@@ -615,6 +615,14 @@ export interface ArchiveBlock {
  */
 export interface FormBlock {
   form: string | Form;
+  /**
+   * Enable HubSpot form submission alongside PayloadCMS
+   */
+  useHubSpot?: boolean | null;
+  /**
+   * Select which HubSpot form to submit data to
+   */
+  hubspotForm?: ('contact' | 'newsletter' | 'support') | null;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -1388,6 +1396,8 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  */
 export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
+  useHubSpot?: T;
+  hubspotForm?: T;
   enableIntro?: T;
   introContent?: T;
   id?: T;

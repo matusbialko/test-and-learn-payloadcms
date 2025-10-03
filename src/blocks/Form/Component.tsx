@@ -17,6 +17,8 @@ export type FormBlockType = {
   enableIntro: boolean
   form: FormType
   introContent?: SerializedEditorState
+  useHubSpot?: boolean
+  hubspotForm?: 'contact' | 'newsletter' | 'support'
 }
 
 export const FormBlock: React.FC<
@@ -29,6 +31,8 @@ export const FormBlock: React.FC<
     form: formFromProps,
     form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
     introContent,
+    useHubSpot,
+    hubspotForm,
   } = props
 
   const formMethods = useForm({
@@ -63,7 +67,8 @@ export const FormBlock: React.FC<
         }, 1000)
 
         try {
-          const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
+          // Submit to PayloadCMS
+          const payloadReq = await fetch(`${getClientSideURL()}/api/form-submissions`, {
             body: JSON.stringify({
               form: formID,
               submissionData: dataToSend,
@@ -74,16 +79,104 @@ export const FormBlock: React.FC<
             method: 'POST',
           })
 
-          const res = await req.json()
+          const payloadRes = await payloadReq.json()
+
+          // If HubSpot integration is enabled, also submit to HubSpot
+          if (useHubSpot && hubspotForm) {
+            try {
+              // Hardcoded HubSpot form configurations
+              const hubspotConfigs = {
+                contact: {
+                  formId: '1205f5a0-0aab-45d3-a7bf-00f36b1dbf8a',
+                  portalId: '147000058',
+                  region: 'eu1',
+                },
+                newsletter: {
+                  formId: 'newsletter-form-id-here',
+                  portalId: '147000058',
+                  region: 'eu1',
+                },
+                support: {
+                  formId: 'support-form-id-here',
+                  portalId: '147000058',
+                  region: 'eu1',
+                },
+              }
+
+              const config = hubspotConfigs[hubspotForm]
+              if (config) {
+                // Generate endpoint
+                const endpoint = `https://forms-${config.region}.hsforms.com/submissions/v3/public/submit/formsnext/multipart/${config.portalId}/${config.formId}`
+
+                // Convert data to HubSpot format
+                const hubspotData = new FormData()
+                Object.entries(data).forEach(([name, value], index) => {
+                  hubspotData.append(`0-1/${name}`, String(value))
+                })
+
+                // Add hs_context with required HubSpot metadata
+                const hsContext = {
+                  source: 'forms-embed-static',
+                  sourceName: 'forms-embed',
+                  sourceVersion: '1.0',
+                  sourceVersionMajor: '1',
+                  sourceVersionMinor: '0',
+                  referrer: window.location.href,
+                  userAgent: navigator.userAgent,
+                  urlParams: {
+                    _hsPortalId: config.portalId,
+                    _hsFormId: config.formId,
+                    _hsIsQa: 'false',
+                    _hsHublet: config.region,
+                    _hsDisableScriptloader: 'true',
+                    _hsDisableRedirect: 'true',
+                    _hsInstanceId: 'aa59fd93-2700-4312-aa68-26b586a57d89',
+                  },
+                  isHubSpotCmsGeneratedPage: false,
+                  isCMSEditor: false,
+                  locale: 'en',
+                  formDefinitionUpdatedAt: Date.now(),
+                  pageUrl: window.location.href,
+                  pageTitle: document.title,
+                  pageId: null,
+                  allPageIds: {},
+                  fieldValues: Object.fromEntries(
+                    Object.entries(data).map(([name, value]) => [`0-1/${name}`, String(value)]),
+                  ),
+                  emailResubscribeStatus: 'NOT_APPLICABLE',
+                  captchaStatus: 'NOT_APPLICABLE',
+                  renderedFieldsIds: Object.keys(data).map((name) => `0-1/${name}`),
+                  boolCheckBoxFields: '',
+                  formId: config.formId,
+                  portalId: parseInt(config.portalId),
+                  region: config.region,
+                  env: 'prod',
+                }
+
+                hubspotData.append('hs_context', JSON.stringify(hsContext))
+
+                const hubspotReq = await fetch(endpoint, {
+                  method: 'POST',
+                  body: hubspotData,
+                })
+
+                if (!hubspotReq.ok) {
+                  console.warn('HubSpot submission failed:', hubspotReq.status)
+                }
+              }
+            } catch (hubspotErr) {
+              console.warn('HubSpot submission error:', hubspotErr)
+            }
+          }
 
           clearTimeout(loadingTimerID)
 
-          if (req.status >= 400) {
+          if (payloadReq.status >= 400) {
             setIsLoading(false)
 
             setError({
-              message: res.errors?.[0]?.message || 'Internal Server Error',
-              status: res.status,
+              message: payloadRes.errors?.[0]?.message || 'Internal Server Error',
+              status: payloadRes.status,
             })
 
             return
@@ -110,7 +203,7 @@ export const FormBlock: React.FC<
 
       void submitForm()
     },
-    [router, formID, redirect, confirmationType],
+    [router, formID, redirect, confirmationType, useHubSpot, hubspotForm],
   )
 
   return (
