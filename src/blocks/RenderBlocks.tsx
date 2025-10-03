@@ -14,12 +14,14 @@ import { RegisterBlock } from '@/blocks/RegisterBlock/Component'
 import { UserDetailsBlock } from '@/blocks/UserDetailsBlock/Component'
 import { TodoListBlock } from './TodoListBlock/Component'
 import { HeroBlock } from '@/blocks/HeroBlock/Component'
+import { HubSpotContactFormBlock } from '@/blocks/HubSpotContactForm/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
+  hubspotContactFormBlock: HubSpotContactFormBlock,
   mediaBlock: MediaBlock,
   exampleBlock: ExampleBlock,
   chartBlock: ChartBlock,

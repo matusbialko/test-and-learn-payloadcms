@@ -19,6 +19,7 @@ import { RegisterBlock } from '../../blocks/RegisterBlock/config'
 import { UserDetailsBlock } from '../../blocks/UserDetailsBlock/config'
 import { TodoListBlock } from '../../blocks/TodoListBlock/config'
 import { HeroBlock } from '../../blocks/HeroBlock/config'
+import { HubSpotContactFormBlock } from '../../blocks/HubSpotContactForm/config'
 
 import {
   MetaDescriptionField,
@@ -89,6 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 MediaBlock,
                 Archive,
                 FormBlock,
+                HubSpotContactFormBlock,
                 ExampleBlock,
                 ChartBlock,
                 LoginBlock,

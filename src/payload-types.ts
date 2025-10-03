@@ -223,6 +223,7 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FormBlock
+    | HubSpotContactFormBlock
     | ExampleBlock
     | ChartBlock
     | LoginBlock
@@ -823,6 +824,24 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HubSpotContactFormBlock".
+ */
+export interface HubSpotContactFormBlock {
+  /**
+   * Choose which HubSpot form to display
+   */
+  formType: 'form-1' | 'form-2' | 'form-3';
+  enableIntro?: boolean | null;
+  /**
+   * HTML content to display above the form
+   */
+  introContent?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hubspotContactFormBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ExampleBlock".
  */
 export interface ExampleBlock {
@@ -1247,6 +1266,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        hubspotContactFormBlock?: T | HubSpotContactFormBlockSelect<T>;
         exampleBlock?: T | ExampleBlockSelect<T>;
         chartBlock?: T | ChartBlockSelect<T>;
         loginBlock?: T | LoginBlockSelect<T>;
@@ -1368,6 +1388,17 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  */
 export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
+  enableIntro?: T;
+  introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HubSpotContactFormBlock_select".
+ */
+export interface HubSpotContactFormBlockSelect<T extends boolean = true> {
+  formType?: T;
   enableIntro?: T;
   introContent?: T;
   id?: T;
